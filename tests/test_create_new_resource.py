@@ -1,21 +1,14 @@
 import requests
-import yaml
-
-# Load the configuration file
-with open('config.yaml', 'r') as f:
-    config = yaml.safe_load(f)
-
-BASE_URL = config['base_url']
 
 
-def test_create_new_resource():
+def test_create_new_resource(config):
     data = {
         'name': 'Tatooine',
         'climate': 'arid',
         'terrain': 'desert',
         'population': '200000',
     }
-    response = requests.post(BASE_URL + 'planets/', json=data)
+    response = requests.post(config.base_url + 'planets/', json=data)
     assert response.status_code == 201
     new_data = response.json()
     assert new_data['name'] == 'Tatooine'
@@ -24,22 +17,22 @@ def test_create_new_resource():
     assert new_data['population'] == '200000'
 
 
-def test_create_new_resource_with_missing_fields():
+def test_create_new_resource_with_missing_fields(config):
     data = {
         'name': 'Test Planet',
         'climate': 'temperate',
         'terrain': 'mountains',
     }
-    response = requests.post(BASE_URL + 'planets/', json=data)
+    response = requests.post(config.base_url + 'planets/', json=data)
     assert response.status_code == 400
 
 
-def test_create_new_resource_with_invalid_data_format():
+def test_create_new_resource_with_invalid_data_format(config):
     data = {
         'name': 'Test Planet',
         'climate': 'temperate',
         'terrain': 'mountains',
         'population': 200000,
     }
-    response = requests.post(BASE_URL + 'planets/', json=data)
+    response = requests.post(config.base_url + 'planets/', json=data)
     assert response.status_code == 400

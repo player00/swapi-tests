@@ -1,25 +1,25 @@
 import requests
 import pytest
-import yaml
 
-# Load the configuration file
-with open('config.yaml', 'r') as f:
-    config = yaml.safe_load(f)
+from configuration import TestSettings
 
-BASE_URL = config['base_url']
+
+@pytest.fixture(scope='session')
+def config():
+    return TestSettings()
 
 
 @pytest.fixture(scope='function')
-def planet():
+def planet(config):
     data = {
         'name': 'Test Planet',
         'climate': 'temperate',
         'terrain': 'mountains',
         'population': '100000',
     }
-    response = requests.post(BASE_URL + 'planets/', json=data)
+    response = requests.post(config.base_url + 'planets/', json=data)
     assert response.status_code == 201
     planet_data = response.json()
     yield planet_data
-    response = requests.delete(BASE_URL + f"planets/{planet_data['id']}/")
+    response = requests.delete(config.base_url + f"planets/{planet_data['id']}/")
     assert response.status_code == 204

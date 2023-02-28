@@ -1,14 +1,7 @@
 import requests
-import yaml
-
-# Load the configuration file
-with open('config.yaml', 'r') as f:
-    config = yaml.safe_load(f)
-
-BASE_URL = config['base_url']
 
 
-def test_search_for_resource():
+def test_search_for_resource(config):
     expected_name = 'Luke Skywalker'
     expected_height = '172'
     expected_mass = '77'
@@ -18,7 +11,7 @@ def test_search_for_resource():
     expected_birth_year = '19BBY'
     expected_gender = 'male'
 
-    response = requests.get(BASE_URL + 'people/?search=Luke')
+    response = requests.get(config.base_url + 'people/?search=Luke')
     assert response.status_code == 200
 
     data = response.json()
