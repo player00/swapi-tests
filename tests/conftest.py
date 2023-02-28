@@ -2,7 +2,7 @@ import requests
 import pytest
 
 from configuration import TestSettings
-
+from utils.api_client import ApiClient
 
 
 @pytest.fixture(scope='session')
@@ -10,17 +10,20 @@ def config():
     return TestSettings()
 
 
+@pytest.fixture(scope='session')
+def api_client(config):
+    return ApiClient(config.base_url)
+
+
 @pytest.fixture(scope='function')
-def planet(config):
+def planet(api_client):
     data = {
         'name': 'Test Planet',
         'climate': 'temperate',
         'terrain': 'mountains',
         'population': '100000',
     }
-    response = requests.post(config.base_url + 'planets/', json=data)
-    assert response.status_code == 201
-    planet_data = response.json()
+    req = ApiClient(config.base_url)
+    planet_data = req.create_new_resource('planets', data)
     yield planet_data
-    response = requests.delete(config.base_url + f"planets/{planet_data['id']}/")
-    assert response.status_code == 204
+    req.delete_existing_resource('planets', planet_data['id'])

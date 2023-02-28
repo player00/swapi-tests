@@ -29,3 +29,8 @@ class ApiClient():
         response = requests.put(self.base_url + f"{resource}/{id}/", data=data)
         response.raise_for_status()
         return response.json()
+    
+    def delete_existing_resource(self, resource, id):
+        response = requests.delete(self.base_url + f"{resource}/{id}/")
+        response.raise_for_status()
+        return response.json()
