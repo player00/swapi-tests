@@ -1,9 +1,5 @@
-from utils.api_client import ApiClient
-
-
-def test_get_specific_resource(config):
-    req = ApiClient(config.base_url)
-    data = req.get_resource_by_id('people', '1')
+def test_get_specific_resource(api_client):
+    data = api_client.get_resource_by_id('people', '1')
     assert data['name'] == 'Luke Skywalker'
     assert data['height'] == '172'
     assert data['mass'] == '77'

@@ -1,7 +1,4 @@
-from utils.api_client import ApiClient
-
-
-def test_search_for_resource(config):
+def test_search_for_resource(api_client):
     expected_name = 'Luke Skywalker'
     expected_height = '172'
     expected_mass = '77'
@@ -11,8 +8,7 @@ def test_search_for_resource(config):
     expected_birth_year = '19BBY'
     expected_gender = 'male'
 
-    req = ApiClient(config.base_url)
-    data = req.search_for_resource('people', 'Luke')
+    data = api_client.search_for_resource('people', 'Luke')
 
     assert len(data['results']) == 1
 
