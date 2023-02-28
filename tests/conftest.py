@@ -4,6 +4,7 @@ import pytest
 from configuration import TestSettings
 
 
+
 @pytest.fixture(scope='session')
 def config():
     return TestSettings()

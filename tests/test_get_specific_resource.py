@@ -1,10 +1,9 @@
-import requests
+from utils.api_client import ApiClient
 
 
 def test_get_specific_resource(config):
-    response = requests.get(config.base_url + 'people/1')
-    assert response.status_code == 200
-    data = response.json()
+    req = ApiClient(config.base_url)
+    data = req.get_resource_by_id('people', '1')
     assert data['name'] == 'Luke Skywalker'
     assert data['height'] == '172'
     assert data['mass'] == '77'

@@ -1,4 +1,4 @@
-import requests
+from utils.api_client import ApiClient
 
 
 def test_create_new_resource(config):
@@ -8,9 +8,8 @@ def test_create_new_resource(config):
         'terrain': 'desert',
         'population': '200000',
     }
-    response = requests.post(config.base_url + 'planets/', json=data)
-    assert response.status_code == 201
-    new_data = response.json()
+    req = ApiClient(config.base_url)
+    new_data = req.create_new_resource('planets', data)
     assert new_data['name'] == 'Tatooine'
     assert new_data['climate'] == 'arid'
     assert new_data['terrain'] == 'desert'
@@ -23,8 +22,9 @@ def test_create_new_resource_with_missing_fields(config):
         'climate': 'temperate',
         'terrain': 'mountains',
     }
-    response = requests.post(config.base_url + 'planets/', json=data)
-    assert response.status_code == 400
+    req = ApiClient(config.base_url)
+    new_data = req.create_new_resource('planets', data)
+    assert new_data.status_code == 400
 
 
 def test_create_new_resource_with_invalid_data_format(config):
@@ -34,5 +34,6 @@ def test_create_new_resource_with_invalid_data_format(config):
         'terrain': 'mountains',
         'population': 200000,
     }
-    response = requests.post(config.base_url + 'planets/', json=data)
-    assert response.status_code == 400
+    req = ApiClient(config.base_url)
+    new_data = req.create_new_resource('planets', data)
+    assert new_data.status_code == 400

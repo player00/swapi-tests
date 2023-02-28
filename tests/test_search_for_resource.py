@@ -1,4 +1,4 @@
-import requests
+from utils.api_client import ApiClient
 
 
 def test_search_for_resource(config):
@@ -11,10 +11,9 @@ def test_search_for_resource(config):
     expected_birth_year = '19BBY'
     expected_gender = 'male'
 
-    response = requests.get(config.base_url + 'people/?search=Luke')
-    assert response.status_code == 200
+    req = ApiClient(config.base_url)
+    data = req.search_for_resource('people', 'Luke')
 
-    data = response.json()
     assert len(data['results']) == 1
 
     asserted_data = data['results'][0]
